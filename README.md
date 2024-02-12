@@ -17,7 +17,7 @@ To run this app, you need to have:
 To clone the repository, open a terminal or command prompt and run the following command:
 
 ```bash
-git clone https://github.com/ajitfawade/node-todo-cicd.git
+git clone (https://github.com/Mutu1/Node-Todo-App.git)
 ```
 
 This will create a folder named `node-todo-cicd` in your current directory.
@@ -47,7 +47,7 @@ Enter a name for your job (e.g., Node Todo App) and select **Freestyle project**
 
 On the configuration page, you can add some descriptions for your job if you want.
 
-Under **Source Code Management**, select **Git** and enter the repository URL: [https://github.com/ajitfawade/node-todo-cicd.git]. You can leave the other fields as default.
+Under **Source Code Management**, select **Git** and enter the repository URL:(https://github.com/Mutu1/Node-Todo-App.git). You can leave the other fields as default.
 
 Under **Build Triggers**, select **GitHub hook trigger for GITScm polling**. This will enable the job to be triggered by GitHub webhooks.
 
@@ -64,3 +64,32 @@ You can also manually trigger your job by clicking on **Build Now** on your Jenk
 You can see the status and details of your job under **Build History**. You can also click on **Console Output** to see the logs of your job.
 
 You can verify that your app is running by going to your browser and typing `http://localhost:8000`. You should see a todo app where you can add, edit, and delete tasks.
+
+### Step4 : Configure monitoring
+
+Create Ubuntu 20.04 server in AWS. In this server we will install Prometheus 
+
+For Prometheus & Grafana server we need to open 9090 & 3000 port & port 22 for SSH
+
+Download and install Prometheus on the server.
+
+In order to start the Prometheus we need to run ./prometheus in the Prometheus directory
+
+We can view UI of Prometheus at <Public IP:9090>
+
+We need to install the plugin of Prometheus in Jenkins so that Prometheus can gather all the metrics of Jenkins
+
+In Jenkins click on manage plugin and search for Prometheus metrics plugin and click on install
+
+The default path for Jenkins metrics is <Public-IP:8080/prometheus>
+
+Prometheus manages the configuration file named prometheus.yml in which we can define various configuration like alerts, scrape_configs etc.
+
+In order for Prometheus to gather the metrics of the Docker node we need to define below code in prometheus.yml under the scrape_configs stanza
+
+- job_name: "Jenkins Job"
+  static_configs:
+    - targets: ["<Public IP of Jenkins Node:8080"]
+    - 
+After adding the code we can check our node as a target in the Prometheus. It will take some time for Prometheus to gather all the metrics and display the state of node to Up.
+
